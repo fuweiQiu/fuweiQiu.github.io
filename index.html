@@ -1,247 +1,387 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
-  
-  <title>Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://example.com/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:locale" content="en_US">
-<meta property="article:author" content="John Doe">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link rel="stylesheet" href="./css/bootstrap.css" />
+		<script src="./js/bootstrap.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.2/umd/popper.min.js"
+			integrity="sha512-2rNj2KJ+D8s1ceNasTIex6z4HWyOnEYLVC3FigGOmyQCZc2eBXKgOxQmo3oKLHyfcj53uz4QMsRCWNbLd32Q1g=="
+			crossorigin="anonymous"
+			referrerpolicy="no-referrer"
+		></script>
+		<link rel="stylesheet" href="style.css?v=123" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+	</head>
+	<body>
+		<h1 class="title">api測試</h1>
+		<!-- Button trigger modal -->
+		<button
+			type="button"
+			data-bs-toggle="modal"
+			data-bs-target="#headerModal"
+		>
+			自定義Header
+		</button>
+		<!-- Modal -->
+		<div
+			data-bs-theme="dark"
+			class="modal fade"
+			id="headerModal"
+			tabindex="-1"
+			aria-labelledby="exampleModalLabel"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">
+							自定義Header
+						</h1>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div class="modal-body">
+						<div id="customerHeader">
+							<div class="subDetail">
+								<div>
+									<input
+										type="text"
+										placeholder="Key"
+										class="key"
+									/>
+								</div>
+								<span>:</span>
+								<div>
+									<input
+										type="text"
+										placeholder="Value"
+										class="value"
+									/>
+								</div>
+							</div>
+						</div>
+						<button id="addHeader">
+							<i class="fa-solid fa-plus"></i>新增
+						</button>
+					</div>
+					<div class="modal-footer">
+						<button
+							type="button"
+							data-bs-dismiss="modal"
+							id="headerSave"
+						>
+							儲存
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+		<button
+			type="button"
+			data-bs-toggle="modal"
+			data-bs-target="#historyModal"
+		>
+			歷史紀錄
+		</button>
+		<div
+			data-bs-theme="dark"
+			class="modal fade"
+			id="historyModal"
+			tabindex="-1"
+			aria-labelledby="exampleModalLabel"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h1 class="modal-title fs-5" id="exampleModalLabel">
+							歷史紀錄
+						</h1>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+						></button>
+					</div>
+					<div class="modal-body" id="historyContainer"></div>
+				</div>
+			</div>
+		</div>
+		<button onclick="document.getElementById('answerFile').click()">
+			匯入預期回傳格式
+		</button>
+		<input type="file" id="answerFile" name="answerFile" accept=".json" />
+		<br />
+		<input type="text" id="method" placeholder="請求方法(POST/GET)" />
+		<input type="text" id="addr" placeholder="輸入網址" />
+		<button id="start">送出請求</button>
+		<br />
+		<div id="main">
+			<textarea name="" id="result"> </textarea>
+			<textarea name="" id="answer"></textarea>
+			<div id="answerSaveContainer">
+				<button id="answerSave">更新預期回傳格式</button>
+			</div>
+			<!-- Error Modal -->
+			<div
+				class="modal fade"
+				id="ErrorModal"
+				tabindex="-1"
+				data-bs-theme="dark"
+				aria-hidden="true"
+			>
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h1 class="modal-title fs-5" id="exampleModalLabel">
+								格式錯誤
+							</h1>
+							<button
+								type="button"
+								class="btn-close"
+								data-bs-dismiss="modal"
+								aria-label="Close"
+							></button>
+						</div>
+						<div class="modal-body">
+							<p>輸入值非合法的JSON格式</p>
+							<strong style="color: red"
+								>JSON格式較嚴謹字串需使用「"」而非「'」</strong
+							>
+						</div>
+						<div class="modal-footer">
+							<button type="button" data-bs-dismiss="modal">
+								關閉
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="loading" style="display: none">
+			<span class="main-loading"></span>
+		</div>
+	</body>
 
-  
-  
-<meta name="generator" content="Hexo 7.2.0"></head>
+	<script>
+		let customerHeader;
+		let answer = "";
+		// 新增Header
+		$("#addHeader").click(function () {
+			$("#customerHeader").last().append(`
+                <div class="subDetail">
+                    <div>
+                        <input type="text" placeholder="Key" class="key">
+                    </div>
+                    <span>:</span>
+                    <div>
+                        <input type="text" placeholder="Value" class="value">
+                    </div>
+                </div>
+            `);
+		});
+		// 儲存自定義Header
+		$("#headerSave").click(function () {
+			customerHeader = {};
+			let count = $(".subDetail").length;
+			for (let i = 0; i < count; i++) {
+				let k = $(".subDetail").eq(i).find(".key").val();
+				let v = $(".subDetail").eq(i).find(".value").val();
+				if (k !== "" && v !== "") {
+					customerHeader[k] = v;
+				}
+			}
+		});
+		// 匯入預期回傳格式檔案
+		$("#answerFile").change(function (e) {
+			let file = this.files[0];
+			if (file) {
+				let reader = new FileReader();
+				reader.onload = (e) => {
+					$("#answer").text(
+						JSON.stringify(JSON.parse(e.target.result), null, 2)
+					);
+					answer = JSON.parse(e.target.result);
+				};
+				reader.readAsText(file);
+			}
+		});
+		// 預期回傳格式變動
+		$("#answer").on("input", function () {
+			if ($("#answer").val() !== JSON.stringify(answer, null, 2)) {
+				$("#answerSaveContainer").css("display", "block");
+			} else {
+				$("#answerSaveContainer").css("display", "none");
+			}
+			if (answer === "" && !$("#answer").val()) {
+				$("#answerSaveContainer").css("display", "none");
+			}
+		});
+		// 更新預期回傳格式
+		$("#answerSave").click(function () {
+			try {
+				answer = JSON.parse($("#answer").val());
+				$("#answerSaveContainer").css("display", "none");
+			} catch {
+				const myModal = new bootstrap.Modal("#ErrorModal").show();
+			}
+		});
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://example.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
+		let history = JSON.parse(localStorage.getItem("testHistory"));
+		if (!history) {
+			history = [];
+		} else {
+			renderHistory();
+		}
+		function renderHistory() {
+			$("#historyContainer").text("");
+			Rhistory = history.slice().reverse();
+			Rhistory.forEach((element) => {
+				if ($("#historyContainer").text() != "") {
+					$("#historyContainer").last().append("<hr />");
+				}
+				$("#historyContainer").last().append(`
+                    <div class="history">
+                        <p class="info">
+                            <span class="time">${element.time}</span>
+                            <span class="method">${element.method}</span>
+                            <span class="status">${element.status}</span>
+                        </p>
+                        <p>${element.url}</p>
+                    </div>
+                `);
+			});
+		}
+		function addHistory(method, url, status) {
+			let dateContent = "";
+			let d = new Date();
+			dateContent += `${
+				d.getMonth() + 1
+			}/${d.getDate()} ${d.getHours()}:${d.getMinutes()}`;
+			if (history.length >= 20) {
+				history.pop();
+			}
+			history.push({
+				url: url,
+				method: method,
+				status: status,
+				time: dateContent,
+			});
+			renderHistory();
+			localStorage.testHistory = JSON.stringify(history);
+		}
+		function check() {
+			if (_.isEqual(answer, JSON.parse($("#result").val()))) {
+				var end = Date.now() + 1 * 1000;
 
-      <div class="outer">
-        <section id="main">
-  
-    <article id="post-Gaole-Master製作" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/06/09/Gaole-Master%E8%A3%BD%E4%BD%9C/" class="article-date">
-  <time class="dt-published" datetime="2024-06-09T09:30:18.000Z" itemprop="datePublished">2024-06-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/06/09/Gaole-Master%E8%A3%BD%E4%BD%9C/">Gaole Master製作</a>
-    </h1>
-  
+				// go Buckeyes!
+				var colors = ["#bb0000", "#ffffff"];
 
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2024/06/09/Gaole-Master%E8%A3%BD%E4%BD%9C/" data-id="clx7cg8kr0000z4sqb13bfs2y" data-title="Gaole Master製作" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
+				(function frame() {
+					confetti({
+						particleCount: 2,
+						angle: 60,
+						spread: 55,
+						origin: { x: 0 },
+						colors: colors,
+					});
+					confetti({
+						particleCount: 2,
+						angle: 120,
+						spread: 55,
+						origin: { x: 1 },
+						colors: colors,
+					});
 
+					if (Date.now() < end) {
+						requestAnimationFrame(frame);
+					}
+				})();
+			} else {
+				var scalar = 2;
+				var poop = confetti.shapeFromText({ text: "💩", scalar });
 
+				var defaults = {
+					spread: 360,
+					ticks: 60,
+					gravity: 0,
+					decay: 0.96,
+					startVelocity: 20,
+					shapes: [poop],
+					scalar,
+				};
 
-  
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2024/06/09/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2024-06-09T09:24:58.356Z" itemprop="datePublished">2024-06-09</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2024/06/09/hello-world/">技能競賽南區賽-參賽過程</a>
-    </h1>
-  
+				function shoot() {
+					confetti({
+						...defaults,
+						particleCount: 30,
+					});
 
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+					confetti({
+						...defaults,
+						particleCount: 5,
+						flat: true,
+					});
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+					confetti({
+						...defaults,
+						particleCount: 15,
+						scalar: scalar / 2,
+						shapes: ["circle"],
+					});
+				}
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+				setTimeout(shoot, 0);
+				setTimeout(shoot, 100);
+				setTimeout(shoot, 200);
+			}
+		}
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2024/06/09/hello-world/" data-id="clx7c9xh10000dcsqdufc90g7" data-title="技能競賽南區賽-參賽過程" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">June 2024</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2024/06/09/Gaole-Master%E8%A3%BD%E4%BD%9C/">Gaole Master製作</a>
-          </li>
-        
-          <li>
-            <a href="/2024/06/09/hello-world/">技能競賽南區賽-參賽過程</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-      &copy; 2024 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
-
-  
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
-</body>
+		document.getElementById("start").addEventListener("click", function () {
+			document.querySelector(".loading").style.display = "flex";
+			let url = document.getElementById("addr").value;
+			let method = document.getElementById("method").value;
+			let stauts;
+			fetch(url, {
+				method: method,
+				headers: customerHeader,
+			})
+				.then((response) => {
+					stauts = response.status;
+					return response.json();
+				})
+				.then((data) => {
+					document.getElementById("result").value = JSON.stringify(
+						data,
+						null,
+						2
+					);
+				})
+				.catch((e) => {
+					document.getElementById("result").value = ":(";
+				})
+				.finally(() => {
+					if (answer !== "") {
+						check();
+					}
+					addHistory(method, url, stauts);
+					document.querySelector(".loading").style.display = "none";
+				}, 2000);
+		});
+	</script>
 </html>
