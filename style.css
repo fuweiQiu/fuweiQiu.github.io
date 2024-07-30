@@ -1,0 +1,162 @@
+@font-face {
+	font-family: "Cubic-11";
+	src: url("/fonts/Cubic_11_1.200_R.woff2");
+}
+
+* {
+	font-family: "Cubic-11" !important;
+	margin: 0;
+	padding: 0;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	text-align: center;
+}
+
+.loading {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	background-color: rgba(209, 209, 209, 0.472);
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	display: flex;
+}
+
+.main-loading {
+	border: 10px rgba(128, 128, 128, 0.576) solid;
+	width: 5rem;
+	height: 5rem;
+	display: inline-block;
+	border-radius: 50%;
+	border-top-color: rgb(59, 167, 255);
+	animation: load 1s ease infinite;
+}
+
+@keyframes load {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+body {
+	color: white;
+	background-color: rgb(23, 23, 23);
+}
+
+button {
+	padding: 5px;
+	background-color: transparent;
+	color: white;
+	margin: 10px 0;
+	border: 1px solid white !important;
+	border-radius: 0 !important;
+}
+
+button:hover {
+	color: rgb(23, 23, 23);
+	background-color: white;
+}
+
+input#addr {
+	width: min(500px, 50%);
+}
+
+#method {
+	width: 20%;
+}
+
+textarea,
+input {
+	padding: 5px;
+	background-color: rgb(23, 23, 23);
+	border: 1px solid white;
+	color: white;
+	width: 80vw;
+}
+
+input:focus,
+textarea:focus {
+	outline: none;
+}
+
+#customerHeader {
+	width: 100%;
+}
+
+.subDetail {
+	display: grid;
+	grid-template-columns: 5fr 1fr 10fr;
+	align-items: center;
+	margin: 10px 0;
+}
+.key {
+	width: 100%;
+}
+.value {
+	width: 100%;
+}
+
+i {
+	margin: 0 5px;
+}
+
+.info {
+	display: flex;
+	justify-content: start;
+	text-align: start;
+}
+.info span {
+	margin-right: 20px;
+}
+.history p {
+	text-align: start;
+}
+.title {
+	margin-top: 20px;
+}
+#main {
+	display: flex;
+	justify-content: center;
+}
+#main textarea {
+	width: 40%;
+	margin: 10px;
+	font-size: 20px;
+	font-family: monospace !important;
+	height: 300px;
+}
+
+@media screen and (max-width: 768px) {
+	#main textarea {
+		width: 90%;
+	}
+	#main {
+		flex-wrap: wrap;
+	}
+	#answerSaveContainer {
+		position: static;
+		margin-top: 10px;
+	}
+}
+
+#answerFile {
+	display: none;
+}
+#answerSaveContainer {
+	border: 1px solid white;
+	padding: 10px;
+	margin: 10px;
+	position: absolute;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	display: none;
+}
