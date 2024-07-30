@@ -211,9 +211,10 @@
 		$("#answerFile").change(function (e) {
 			let file = this.files[0];
 			if (file) {
+                console.log('友檔案');
 				let reader = new FileReader();
 				reader.onload = (e) => {
-					$("#answer").text(
+					$("#answer").val(
 						JSON.stringify(JSON.parse(e.target.result), null, 2)
 					);
 					answer = JSON.parse(e.target.result);
