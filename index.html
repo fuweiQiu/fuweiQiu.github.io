@@ -238,7 +238,11 @@
 		// 更新預期回傳格式
 		$("#answerSave").click(function () {
 			try {
-				answer = JSON.parse($("#answer").val());
+				if($('#answer').val() == ""){
+					answer = "";
+				}else{
+					answer = JSON.parse($("#answer").val());
+				}
 				$("#answerSaveContainer").css("display", "none");
 			} catch {
 				const myModal = new bootstrap.Modal("#ErrorModal").show();
