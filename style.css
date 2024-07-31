@@ -160,3 +160,8 @@ i {
 	right: 10px;
 	display: none;
 }
+
+#customerQuery>div, #customerBody>div{
+	height: 200px;
+	overflow: scroll;
+}

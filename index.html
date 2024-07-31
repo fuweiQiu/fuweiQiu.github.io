@@ -131,8 +131,52 @@
 		<input type="text" id="addr" placeholder="輸入網址" />
 		<button id="start">送出請求</button>
 		<br />
-		<div id="answerResult">
-			
+		<div id="answerResult"></div>
+		<div class="container">
+			<p class="d-inline-flex gap-1">
+				<button
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#customerQuery"
+					aria-expanded="false"
+					aria-controls="customerQuery"
+				>
+					設定Query Parameter
+				</button>
+				<button
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#customerBody"
+					aria-expanded="false"
+					aria-controls="customerBody"
+				>
+					設定Body
+				</button>
+			</p>
+			<div class="row">
+				<div class="col">
+					<div
+						class="collapse multi-collapse"
+						id="customerQuery"
+						data-bs-theme="dark"
+					>
+						<div class="card card-body">
+							Query Parameter
+						</div>
+					</div>
+				</div>
+				<div class="col">
+					<div
+						class="collapse multi-collapse"
+						id="customerBody"
+						data-bs-theme="dark"
+					>
+						<div class="card card-body">
+							Body
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div id="main">
 			<textarea name="" id="result"> </textarea>
@@ -205,9 +249,9 @@
 		// 更新預期回傳格式
 		$("#answerSave").click(function () {
 			try {
-				if($('#answer').val() == ""){
+				if ($("#answer").val() == "") {
 					answer = "";
-				}else{
+				} else {
 					answer = JSON.parse($("#answer").val());
 				}
 				$("#answerSaveContainer").css("display", "none");
@@ -261,11 +305,9 @@
 		}
 		function check() {
 			if (_.isEqual(answer, JSON.parse($("#result").val()))) {
-				$('#answerResult').text('回傳格式正確!');
-				$('#answerResult').css('color', 'green')
+				$("#answerResult").text("回傳格式正確!");
+				$("#answerResult").css("color", "green");
 				var end = Date.now() + 1 * 1000;
-
-				// go Buckeyes!
 				var colors = ["#bb0000", "#ffffff"];
 
 				(function frame() {
@@ -289,8 +331,8 @@
 					}
 				})();
 			} else {
-				$('#answerResult').text('回傳格式錯誤!');
-				$('#answerResult').css('color', 'red');
+				$("#answerResult").text("回傳格式錯誤!");
+				$("#answerResult").css("color", "red");
 			}
 		}
 
