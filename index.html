@@ -131,46 +131,14 @@
 		<input type="text" id="addr" placeholder="輸入網址" />
 		<button id="start">送出請求</button>
 		<br />
+		<div id="answerResult">
+			
+		</div>
 		<div id="main">
 			<textarea name="" id="result"> </textarea>
 			<textarea name="" id="answer"></textarea>
 			<div id="answerSaveContainer">
 				<button id="answerSave">更新預期回傳格式</button>
-			</div>
-			<!-- Error Modal -->
-			<div
-				class="modal fade"
-				id="ErrorModal"
-				tabindex="-1"
-				data-bs-theme="dark"
-				aria-hidden="true"
-			>
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h1 class="modal-title fs-5" id="exampleModalLabel">
-								格式錯誤
-							</h1>
-							<button
-								type="button"
-								class="btn-close"
-								data-bs-dismiss="modal"
-								aria-label="Close"
-							></button>
-						</div>
-						<div class="modal-body">
-							<p>輸入值非合法的JSON格式</p>
-							<strong style="color: red"
-								>JSON格式較嚴謹字串需使用「"」而非「'」</strong
-							>
-						</div>
-						<div class="modal-footer">
-							<button type="button" data-bs-dismiss="modal">
-								關閉
-							</button>
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
 		<div class="loading" style="display: none">
@@ -211,7 +179,6 @@
 		$("#answerFile").change(function (e) {
 			let file = this.files[0];
 			if (file) {
-				console.log("友檔案");
 				let reader = new FileReader();
 				reader.onload = (e) => {
 					$("#answer").val(
@@ -294,6 +261,8 @@
 		}
 		function check() {
 			if (_.isEqual(answer, JSON.parse($("#result").val()))) {
+				$('#answerResult').text('回傳格式正確!');
+				$('#answerResult').css('color', 'green')
 				var end = Date.now() + 1 * 1000;
 
 				// go Buckeyes!
@@ -320,42 +289,8 @@
 					}
 				})();
 			} else {
-				var scalar = 2;
-				var poop = confetti.shapeFromText({ text: "💩", scalar });
-
-				var defaults = {
-					spread: 360,
-					ticks: 60,
-					gravity: 0,
-					decay: 0.96,
-					startVelocity: 20,
-					shapes: [poop],
-					scalar,
-				};
-
-				function shoot() {
-					confetti({
-						...defaults,
-						particleCount: 30,
-					});
-
-					confetti({
-						...defaults,
-						particleCount: 5,
-						flat: true,
-					});
-
-					confetti({
-						...defaults,
-						particleCount: 15,
-						scalar: scalar / 2,
-						shapes: ["circle"],
-					});
-				}
-
-				setTimeout(shoot, 0);
-				setTimeout(shoot, 100);
-				setTimeout(shoot, 200);
+				$('#answerResult').text('回傳格式錯誤!');
+				$('#answerResult').css('color', 'red');
 			}
 		}
 
