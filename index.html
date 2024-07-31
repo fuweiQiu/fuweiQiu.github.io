@@ -54,7 +54,7 @@
 						></button>
 					</div>
 					<div class="modal-body">
-						<div id="customerHeader">
+						<div id="HeaderConfig">
 							<div class="subDetail">
 								<div>
 									<input
@@ -73,7 +73,7 @@
 								</div>
 							</div>
 						</div>
-						<button id="addHeader">
+						<button class="addHeader" cus-target="#HeaderConfig">
 							<i class="fa-solid fa-plus"></i>新增
 						</button>
 					</div>
@@ -161,7 +161,29 @@
 						data-bs-theme="dark"
 					>
 						<div class="card card-body">
-							Query Parameter
+							<h3>自定義Qeury參數</h3>
+							<div id="QueryConfig">
+								<div class="subDetail">
+									<div>
+										<input
+											type="text"
+											placeholder="Key"
+											class="key"
+										/>
+									</div>
+									<span>:</span>
+									<div>
+										<input
+											type="text"
+											placeholder="Value"
+											class="value"
+										/>
+									</div>
+								</div>
+							</div>
+							<button class="addHeader" cus-target="#QueryConfig">
+								<i class="fa-solid fa-plus"></i>新增
+							</button>
 						</div>
 					</div>
 				</div>
@@ -172,7 +194,29 @@
 						data-bs-theme="dark"
 					>
 						<div class="card card-body">
-							Body
+							<h3>自定義Body內容</h3>
+							<div id="BodyConfig">
+								<div class="subDetail">
+									<div>
+										<input
+											type="text"
+											placeholder="Key"
+											class="key"
+										/>
+									</div>
+									<span>:</span>
+									<div>
+										<input
+											type="text"
+											placeholder="Value"
+											class="value"
+										/>
+									</div>
+								</div>
+							</div>
+							<button class="addHeader" cus-target="#BodyConfig">
+								<i class="fa-solid fa-plus"></i>新增
+							</button>
 						</div>
 					</div>
 				</div>
@@ -191,11 +235,11 @@
 	</body>
 
 	<script>
-		let customerHeader;
+		let HeaderConfig;
 		let answer = "";
 		// 新增Header
-		$("#addHeader").click(function () {
-			$("#customerHeader").last().append(`
+		$(".addHeader").click(function () {
+			$($(this).attr("cus-target")).last().append(`
                 <div class="subDetail">
                     <div>
                         <input type="text" placeholder="Key" class="key">
@@ -209,13 +253,13 @@
 		});
 		// 儲存自定義Header
 		$("#headerSave").click(function () {
-			customerHeader = {};
+			HeaderConfig = {};
 			let count = $(".subDetail").length;
 			for (let i = 0; i < count; i++) {
 				let k = $(".subDetail").eq(i).find(".key").val();
 				let v = $(".subDetail").eq(i).find(".value").val();
 				if (k !== "" && v !== "") {
-					customerHeader[k] = v;
+					HeaderConfig[k] = v;
 				}
 			}
 		});
@@ -336,14 +380,56 @@
 			}
 		}
 
-		document.getElementById("start").addEventListener("click", function () {
-			document.querySelector(".loading").style.display = "flex";
-			let url = document.getElementById("addr").value;
-			let method = document.getElementById("method").value;
+		function getQuery() {
+			let result = {};
+			let count = $("#QueryConfig .subDetail").length;
+			for (let i = 0; i < count; i++) {
+				if (
+					$("#QueryConfig .subDetail").eq(i).find(".key").val() !==
+						"" &&
+					$("#QueryConfig .subDetail").eq(i).find(".value").val() !==
+						""
+				) {
+					result[
+						$("#QueryConfig .subDetail").eq(i).find(".key").val()
+					] = $("#QueryConfig .subDetail").eq(i).find(".value").val();
+				}
+			}
+			return result;
+		}
+
+		function getBody(){
+			let result = {};
+			let count = $("#BodyConfig .subDetail").length;
+			for (let i = 0; i < count; i++) {
+				if (
+					$("#BodyConfig .subDetail").eq(i).find(".key").val() !==
+						"" &&
+					$("#BodyConfig .subDetail").eq(i).find(".value").val() !==
+						""
+				) {
+					result[
+						$("#BodyConfig .subDetail").eq(i).find(".key").val()
+					] = $("#BodyConfig .subDetail").eq(i).find(".value").val();
+				}
+			}
+			let body = new FormData();
+			Object.keys(result).forEach(k => {if(k !== undefined){body.append(k, result[k])}else{return}});
+			return body;
+		}
+
+		$("#start").click(function () {
+			$(".loading").css("display", "flex");
+			let url = new URL($("#addr").val());
+			let method = $("#method").val();
 			let stauts;
+			let queryList = getQuery();
+			let body = getBody();
+			Object.keys(queryList).forEach(k => {if(k !== undefined){url.searchParams.append(k, queryList[k])}else{return}});
 			fetch(url, {
 				method: method,
-				headers: customerHeader,
+				headers: HeaderConfig,
+				body: body
 			})
 				.then((response) => {
 					stauts = response.status;
