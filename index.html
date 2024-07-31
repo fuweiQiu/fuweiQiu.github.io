@@ -424,7 +424,10 @@
 			let method = $("#method").val();
 			let stauts;
 			let queryList = getQuery();
-			let body = getBody();
+			let body = null;
+			if(method.toUpperCase() == 'POST'){
+				body = getBody();
+			}
 			Object.keys(queryList).forEach(k => {if(k !== undefined){url.searchParams.append(k, queryList[k])}else{return}});
 			fetch(url, {
 				method: method,
